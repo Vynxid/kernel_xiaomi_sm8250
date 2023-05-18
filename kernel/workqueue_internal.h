@@ -31,6 +31,7 @@ struct worker {
 	struct work_struct	*current_work;	/* K: work being processed and its */
 	work_func_t		current_func;	/* K: function */
 	struct pool_workqueue	*current_pwq; /* K: pwq */
+	u64			current_at;	/* K: runtime at start or last wakeup */
 
 	int			sleeping;	/* S: is worker sleeping? */
 
@@ -75,6 +76,7 @@ static inline struct worker *current_wq_worker(void)
  */
 void wq_worker_running(struct task_struct *task);
 void wq_worker_sleeping(struct task_struct *task);
+void wq_worker_tick(struct task_struct *task);
 work_func_t wq_worker_last_func(struct task_struct *task);
 
 #endif /* _KERNEL_WORKQUEUE_INTERNAL_H */
