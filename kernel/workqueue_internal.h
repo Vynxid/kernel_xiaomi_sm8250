@@ -28,13 +28,14 @@ struct worker {
 		struct hlist_node	hentry;	/* L: while busy */
 	};
 
-	struct work_struct	*current_work;	/* L: work being processed */
-	work_func_t		current_func;	/* L: current_work's fn */
-	struct pool_workqueue	*current_pwq; /* L: current_work's pwq */
-	int			sleeping;	/* None */
+	struct work_struct	*current_work;	/* K: work being processed and its */
+	work_func_t		current_func;	/* K: function */
+	struct pool_workqueue	*current_pwq; /* K: pwq */
+
+	int			sleeping;	/* S: is worker sleeping? */
 
 	/* used by the scheduler to determine a worker's last known identity */
-	work_func_t		last_func;
+	work_func_t		last_func;		/* K: last work's fn */
 
 	struct list_head	scheduled;	/* L: scheduled works */
 
@@ -44,7 +45,7 @@ struct worker {
 	struct list_head	node;		/* A: anchored at pool->workers */
 						/* A: runs through worker->node */
 
-	unsigned long		last_active;	/* L: last active timestamp */
+	unsigned long		last_active;	/* K: last active timestamp */
 	unsigned int		flags;		/* X: flags */
 	int			id;		/* I: worker id */
 
