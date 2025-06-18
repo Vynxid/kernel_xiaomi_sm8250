@@ -1033,7 +1033,7 @@ void wq_worker_tick(struct task_struct *task)
 	    wq_cpu_intensive_thresh_us * NSEC_PER_USEC)
 		return;
 
-	raw_spin_lock(&pool->lock);
+	spin_lock(&pool->lock);
 
 	worker_set_flags(worker, WORKER_CPU_INTENSIVE);
 	pwq->stats[PWQ_STAT_CPU_INTENSIVE]++;
@@ -1043,7 +1043,7 @@ void wq_worker_tick(struct task_struct *task)
 		wake_up_worker(pool);
 	}
 
-	raw_spin_unlock(&pool->lock);
+	spin_unlock(&pool->lock);
 }
 
 /**
